@@ -1,48 +1,43 @@
 // nuxt.config.ts
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    'nuxt-icon',
-    '@nuxtjs/i18n'
-  ],
+  devtools: { enabled: false },
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n'],
 
+  future:{
+    compatibilityVersion: 4
+  },
   i18n: {
     locales: [
       {
-        code: 'en',
+        code: 'en-US',
         name: 'English',
-        language: 'en-US',
-        file: 'en.json'
+        file: 'en-US.json',
       },
       {
-        code: 'fr',
+        code: 'fr-FR',
         name: 'Français',
-        language: 'fr-FR',
-        file: 'fr.json'
+        file: 'fr-FR.json',
       },
       {
-        code: 'sv',
+        code: 'sv-SV',
         name: 'Svenska',
-        language: 'sv-SE',
-        file: 'sv.json'
+        file: 'sv-SE.json',
       },
       {
-        code: 'th',
+        code: 'th-TH',
         name: 'ไทย',
-        language: 'th-TH',
-        file: 'th.json'
-      }
+        file: 'th-TH.json',
+      },
     ],
     lazy: true,
-    langDir: 'locales',
-    defaultLocale: 'en',
+    langDir: '../locales',
+    defaultLocale: 'en-US',
     strategy: 'prefix_except_default',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected2',
-      redirectOn: 'root'
-    }
-  }
-})
+      redirectOn: 'root',
+    },
+  },
+});
