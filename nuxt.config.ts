@@ -3,7 +3,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false },
   modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@nuxtjs/i18n'],
-
+  plugins: [
+    // ... other plugins
+    '~/plugins/rippleBackground.js'
+  ],
   future:{
     compatibilityVersion: 4
   },

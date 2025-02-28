@@ -1,12 +1,19 @@
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import useRippleBackground from '../composables/useRippleBackground';
+
 // Mouse position tracking for dreamy movement
-const mouseX = ref(0)
-const mouseY = ref(0)
+const mouseX = ref(0);
+const mouseY = ref(0);
+
+// Ripple background
+const { create, cleanup } = useRippleBackground();
+let rippleInitialized = false;
 
 // Random floating elements
-const floatingElements = ref([])
+const floatingElements = ref([]);
 const generateFloatingElements = () => {
-  const elements = []
+  const elements = [];
   for (let i = 0; i < 12; i++) {
     elements.push({
       x: Math.random() * 100,
@@ -15,30 +22,54 @@ const generateFloatingElements = () => {
       opacity: 0.3 + Math.random() * 0.5,
       speed: 0.5 + Math.random() * 1.5,
       hue: Math.floor(Math.random() * 60)
-    })
+    });
   }
-  floatingElements.value = elements
-}
+  floatingElements.value = elements;
+};
 
 // Initialize
 onMounted(() => {
-  generateFloatingElements()
+  generateFloatingElements();
+
   window.addEventListener('mousemove', (e) => {
-    mouseX.value = e.clientX
-    mouseY.value = e.clientY
-  })
+    mouseX.value = e.clientX;
+    mouseY.value = e.clientY;
+  });
 
   // Animate noise displacement
-  const noise = document.querySelector('.noise-displacement')
+  const noise = document.querySelector('.noise-displacement');
   if (noise) {
     setInterval(() => {
-      const x = Math.random() * 100
-      const y = Math.random() * 100
-      noise.setAttribute('x', `${x}%`)
-      noise.setAttribute('y', `${y}%`)
-    }, 200)
+      const x = Math.random() * 100;
+      const y = Math.random() * 100;
+      noise.setAttribute('x', `${x}%`);
+      noise.setAttribute('y', `${y}%`);
+    }, 200);
   }
-})
+
+  // Initialize ripple effect
+  nextTick(() => {
+    if (process.client && !rippleInitialized) {
+      // Initialize with colors that complement your existing design
+      create('.dreamscape', {
+        colorStart: '#0a0908',
+        colorMiddle: '#978476',
+        colorEnd: '#7b9e89',
+        rippleColor: 'rgba(211, 190, 173, 0.2)',
+        grainAmount: 0.02,
+        rippleSpeed: 0.8
+      });
+      rippleInitialized = true;
+    }
+  });
+});
+
+onBeforeUnmount(() => {
+  // Cleanup ripple effect
+  if (process.client && rippleInitialized) {
+    cleanup();
+  }
+});
 </script>
 
 <template>
@@ -63,14 +94,13 @@ onMounted(() => {
     </svg>
 
     <!-- Background Layers -->
-    <div class="dream-layer texture-layer"></div>
     <div class="dream-layer grain-layer"></div>
 
     <!-- Gradient Orbs -->
     <div class="dream-layer gradient-orbs"
          :style="{
-        transform: `translate(${mouseX / 80}px, ${mouseY / 80}px)`
-      }">
+           transform: `translate(${mouseX / 80}px, ${mouseY / 80}px)`
+         }">
     </div>
 
     <!-- Floating Elements -->
@@ -80,22 +110,22 @@ onMounted(() => {
           :key="index"
           class="floating-element"
           :style="{
-          left: `${element.x}%`,
-          top: `${element.y}%`,
-          width: `${element.size}px`,
-          height: `${element.size}px`,
-          opacity: element.opacity,
-          filter: `hue-rotate(${element.hue}deg)`,
-          animationDuration: `${20 + element.speed * 10}s`
-        }">
+            left: `${element.x}%`,
+            top: `${element.y}%`,
+            width: `${element.size}px`,
+            height: `${element.size}px`,
+            opacity: element.opacity,
+            filter: `hue-rotate(${element.hue}deg)`,
+            animationDuration: `${20 + element.speed * 10}s`
+          }">
       </div>
     </div>
 
     <!-- Content Container -->
     <div class="content-wrapper"
          :style="{
-        transform: `translate(calc(-50% + ${-mouseX / 200}px), calc(-50% + ${-mouseY / 200}px))`
-      }">
+           transform: `translate(calc(-50% + ${-mouseX / 200}px), calc(-50% + ${-mouseY / 200}px))`
+         }">
       <div class="content-blur"></div>
       <div class="content">
         <div class="title-container">
@@ -110,12 +140,19 @@ onMounted(() => {
           <span class="coming-soon-text">Emerging Soon</span>
           <div class="underline-animation"></div>
         </div>
+
+        <div class="cta-container">
+          <NuxtLink to="/ripple-demo" class="demo-link">
+            View Ripple Effect Demo
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
+/* Keep your existing styles */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Italiana&display=swap');
 
 :root {
@@ -164,12 +201,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-.texture-layer {
-  background-color: var(--bg-color);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise' x='0%25' y='0%25' width='100%25' height='100%25'%3E%3CfeTurbulence baseFrequency='0.01 0.4' result='noise' numOctaves='2' /%3E%3CfeDisplacementMap in='SourceGraphic' in2='noise' scale='5' xChannelSelector='R' yChannelSelector='G' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
-  opacity: 0.5;
 }
 
 .grain-layer {
@@ -300,7 +331,7 @@ body {
   font-weight: 300;
   line-height: 1.6;
   color: var(--text-secondary);
-  margin-bottom: min(3rem, 6vh);
+  margin-bottom: min(1.5rem, 3vh);
   letter-spacing: 0.05em;
   max-width: 85%;
   margin-left: auto;
@@ -312,6 +343,7 @@ body {
   position: relative;
   display: inline-block;
   margin-top: min(1rem, 2vh);
+  margin-bottom: min(2rem, 4vh);
 }
 
 .coming-soon-text {
@@ -332,6 +364,31 @@ body {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--accent-1), var(--accent-3), transparent);
   animation: underline-fade 4s ease-in-out infinite;
+}
+
+/* New Demo Link */
+.cta-container {
+  margin-top: 1.5rem;
+}
+
+.demo-link {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: rgba(211, 190, 173, 0.2);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-1);
+  border-radius: 2px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.demo-link:hover {
+  background-color: rgba(211, 190, 173, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes underline-fade {
