@@ -52,8 +52,8 @@ onMounted(() => {
       </filter>
 
       <filter id="displacement-filter">
-        <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="3" result="turbulence"/>
-        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="30" xChannelSelector="R" yChannelSelector="G"/>
+        <feTurbulence type="turbulence" baseFrequency="0.01" numOctaves="3" result="turbulence" />
+        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="30" xChannelSelector="R" yChannelSelector="G" />
       </filter>
 
       <filter id="blur-filter">
@@ -67,35 +67,29 @@ onMounted(() => {
     <div class="dream-layer grain-layer"></div>
 
     <!-- Gradient Orbs -->
-    <div class="dream-layer gradient-orbs"
-         :style="{
-        transform: `translate(${mouseX / 80}px, ${mouseY / 80}px)`
-      }">
+    <div class="dream-layer gradient-orbs" :style="{
+      transform: `translate(${mouseX / 80}px, ${mouseY / 80}px)`
+    }">
     </div>
 
     <!-- Floating Elements -->
     <div class="floating-elements">
-      <div
-          v-for="(element, index) in floatingElements"
-          :key="index"
-          class="floating-element"
-          :style="{
-          left: `${element.x}%`,
-          top: `${element.y}%`,
-          width: `${element.size}px`,
-          height: `${element.size}px`,
-          opacity: element.opacity,
-          filter: `hue-rotate(${element.hue}deg)`,
-          animationDuration: `${20 + element.speed * 10}s`
-        }">
+      <div v-for="(element, index) in floatingElements" :key="index" class="floating-element" :style="{
+        left: `${element.x}%`,
+        top: `${element.y}%`,
+        width: `${element.size}px`,
+        height: `${element.size}px`,
+        opacity: element.opacity,
+        filter: `hue-rotate(${element.hue}deg)`,
+        animationDuration: `${20 + element.speed * 10}s`
+      }">
       </div>
     </div>
 
     <!-- Content Container -->
-    <div class="content-wrapper"
-         :style="{
-        transform: `translate(calc(-50% + ${-mouseX / 200}px), calc(-50% + ${-mouseY / 200}px))`
-      }">
+    <div class="content-wrapper" :style="{
+      transform: `translate(calc(-50% + ${-mouseX / 200}px), calc(-50% + ${-mouseY / 200}px))`
+    }">
       <div class="content-blur"></div>
       <div class="content">
         <div class="title-container">
@@ -104,7 +98,9 @@ onMounted(() => {
         </div>
 
         <p class="artistic-message">A collection of work undergoing an artistic rebirth </p>
-        <p class="artistic-message"> Im doing a complete design refresh to better showcase my latest work. It will be down for a while</p>
+        <a>https://www.helpwire.app/builds/?token=u0DxbMw8P42cFtfvBcuCtZ9685FcBxFs7sTRyaJG</a>
+        <p class="artistic-message"> Im doing a complete design refresh to better showcase my latest work. It will be
+          down for a while</p>
 
         <div class="coming-soon-container">
           <span class="coming-soon-text">Emerging Soon</span>
@@ -181,9 +177,9 @@ body {
 
 .gradient-orbs {
   background:
-      radial-gradient(circle at 30% 20%, rgba(211, 190, 173, 0.3), transparent 40%),
-      radial-gradient(circle at 70% 60%, rgba(123, 158, 137, 0.4), transparent 50%),
-      radial-gradient(circle at 40% 80%, rgba(151, 132, 118, 0.3), transparent 40%);
+    radial-gradient(circle at 30% 20%, rgba(211, 190, 173, 0.3), transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(123, 158, 137, 0.4), transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(151, 132, 118, 0.3), transparent 40%);
   filter: url(#blur-filter);
   opacity: 0.6;
   mix-blend-mode: screen;
@@ -208,15 +204,20 @@ body {
 }
 
 @keyframes float-around {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
+
   25% {
     transform: translate(50px, -30px) rotate(90deg);
   }
+
   50% {
     transform: translate(10px, 40px) rotate(180deg);
   }
+
   75% {
     transform: translate(-40px, 10px) rotate(270deg);
   }
@@ -335,10 +336,13 @@ body {
 }
 
 @keyframes underline-fade {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
     transform: scaleX(0.3);
   }
+
   50% {
     opacity: 0.8;
     transform: scaleX(1);
@@ -382,7 +386,8 @@ body {
   }
 
   .floating-elements {
-    opacity: 0.5; /* Reduce visual noise on very small screens */
+    opacity: 0.5;
+    /* Reduce visual noise on very small screens */
   }
 }
 
