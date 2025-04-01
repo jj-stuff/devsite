@@ -93,12 +93,13 @@ onMounted(() => {
       <div class="content-blur"></div>
       <div class="content">
         <div class="title-container">
-          <h1 class="artistic-title">CLICK HERE</h1>
+          <h1 class="artistic-title">METAMORPHOSIS</h1>
           <div class="title-backdrop"></div>
         </div>
-        <a
-          href="https://www.helpwire.app/builds/?token=u0DxbMw8P42cFtfvBcuCtZ9685FcBxFs7sTRyaJG">https://www.helpwire.app/builds/?token=u0DxbMw8P42cFtfvBcuCtZ9685FcBxFs7sTRyaJG</a>
 
+        <p class="artistic-message">A collection of work undergoing an artistic rebirth </p>
+        <p class="artistic-message"> Im doing a complete design refresh to better showcase my latest work. It will be
+          down for a while</p>
 
         <div class="coming-soon-container">
           <span class="coming-soon-text">Emerging Soon</span>
